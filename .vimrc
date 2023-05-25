@@ -119,6 +119,10 @@ let g:mapleader = " "
 " Fast saving
 nmap <leader>w :w!<cr>
 
+" Remap Visual Block Mode to Alt-v
+" (Ctrl-v gets picked up by many terminals as copy)
+nmap <leader>v <C-v>
+
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Mouse
