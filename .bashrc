@@ -9,6 +9,7 @@ alias myscreen='tmux attach-session -t DevScreen || tmux new-session -s DevScree
 export RANGER_LOAD_DEFAULT_RC=FALSE
 
 export PS1='\[\e]0;\w\a\]\n\[\e[35m\][\D{%F %T}] \[\e[32m\]\u@\h \[\e[33m\]\w\[\e[0m\]\n\$'
+export WORKSPACE_ROOT=/workspace
 
 stty -ixany
 
@@ -69,7 +70,7 @@ alias qemu-wifi-add='azsphere_v2 device wifi add -s qemu_ap'
 function workspace-create()
 {
   DEV_WORKSPACE_NAME=$1
-  DEV_WORKSPACE=~/workspace/$DEV_WORKSPACE_NAME
+  DEV_WORKSPACE=$WORKSPACE_ROOT/$DEV_WORKSPACE_NAME
   if [ -d $DEV_WORKSPACE ]; then
     echo "Workspace $DEV_WORKSPACE already exists, to recreate it run 'rm -rf $DEV_WORKSPACE' then run this command again"
     return
@@ -81,8 +82,8 @@ function workspace-create()
   mkdir -p $DEV_WORKSPACE/cache
   mkdir -p $DEV_WORKSPACE/src
 
-  # git clone --recursive https://msazuresphere@dev.azure.com/msazuresphere/4x4/_git/exp23-yocto $DEV_WORKSPACE/src/exp23-yocto
-  git clone --recursive git@ssh.dev.azure.com:v3/msazuresphere/4x4/exp23-yocto $DEV_WORKSPACE/src/exp23-yocto
+  git clone --recursive https://msazuresphere@dev.azure.com/msazuresphere/4x4/_git/exp23-yocto $DEV_WORKSPACE/src/exp23-yocto
+  #git clone --recursive git@ssh.dev.azure.com:v3/msazuresphere/4x4/exp23-yocto $DEV_WORKSPACE/src/exp23-yocto
 }
 
 function activate-os-sdk()
@@ -91,7 +92,7 @@ function activate-os-sdk()
   # session.
   launch-dbus
 
-  source ~/os-sdk/setup-env.sh
+  source ~/azure-sphere/os-sdk/setup-env.sh
 }
 
 function workspace-update-sstate()
@@ -231,7 +232,7 @@ function workspace-run-gdb()
 function workspace-activate()
 {
   DEV_WORKSPACE_NAME=$1
-  DEV_WORKSPACE=~/workspace/$DEV_WORKSPACE_NAME
+  DEV_WORKSPACE=$WORKSPACE_ROOT/$DEV_WORKSPACE_NAME
   if [ ! -d $DEV_WORKSPACE ]; then
     echo "Workspace $DEV_WORKSPACE does not exist, create it with 'workspace-create $DEV_WORKSPACE_NAME'"
     return
@@ -298,7 +299,7 @@ function install_latest_os_sdk()
   az pipelines runs artifact download --run-id $LATEST_RUN_ID --artifact-name os-sdk-install --path $SPHERE_TEMP_DIR
 
   chmod +x $SPHERE_TEMP_DIR/install.sh
-  $SPHERE_TEMP_DIR/install.sh -y -u -d /home/glumen/os-sdk
+  $SPHERE_TEMP_DIR/install.sh -y -u -d ~/azure-sphere/os-sdk
 
   rm -r $SPHERE_TEMP_DIR
 }

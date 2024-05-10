@@ -2,6 +2,8 @@
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
+$SCRIPT_DIR/install-apt-packages.sh
+
 mkdir -p ~/.vim/bundle/
 mkdir -p ~/
 
