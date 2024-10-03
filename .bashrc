@@ -15,7 +15,13 @@ stty -ixany
 
 
 # Add .NET Core SDK tools
-export PATH="$PATH:/home/glumen/.dotnet/tools"
+#export PATH="$PATH:/home/glumen/.dotnet/tools"
+
+# I've noticed that for CDEs, we sometimes have trouble running the Git-Credential-Manager under the version of dotnet included in the os-sdk.
+# The error in question looks like:
+# > Failed to create CoreCLR, HRESULT: 0x8007000E
+# And the following export seems to clear it up
+export COMPlus_EnableDiagnostics=0
 
 function ranger-cd {
   tempfile='/tmp/chosendir'
@@ -116,7 +122,7 @@ function workspace-build-py()
   if test -z "$DEV_WORKSPACE" ; then
     echo "No Workspace set, please activate a workspace and try again."
   else
-    OPTIONS=$1
+    DEV_OPTIONS=$1
     $DEV_WORKSPACE/src/exp23-yocto/build.py --cache $DEV_WORKSPACE/cache --out $DEV_WORKSPACE/build -v $DEV_OPTIONS
   fi
 }
